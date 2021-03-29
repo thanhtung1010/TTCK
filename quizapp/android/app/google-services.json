@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "455602468563",
+    "firebase_url": "https://chatapp-986ed.firebaseio.com",
+    "project_id": "chatapp-986ed",
+    "storage_bucket": "chatapp-986ed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:455602468563:android:afaf8c7e243350f81c0626",
+        "android_client_info": {
+          "package_name": "com.example.quizapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "455602468563-1okr3olncat0m6hf0g9dr96tat5t3kj3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWT6YUNze8Kx_jkKoQDAvLzK3axTsaAu0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "455602468563-1okr3olncat0m6hf0g9dr96tat5t3kj3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
