@@ -3,9 +3,11 @@ import 'package:quizapp/views/Constants.dart';
 
 class ForgotPassword extends StatelessWidget {
   final Function press;
+  final String text;
   const ForgotPassword({
     Key key,
     this.press,
+    this.text,
   }) : super(key: key);
 
   @override
@@ -16,10 +18,11 @@ class ForgotPassword extends StatelessWidget {
         GestureDetector(
           onTap: press,
           child: Text(
-            'Forgot password !!',
+            text,
             style: TextStyle(
               color: kPrimaryColor,
               fontWeight: FontWeight.bold,
+              decoration: TextDecoration.underline,
             ),
           ),
         )

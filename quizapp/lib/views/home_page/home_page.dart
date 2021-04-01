@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quizapp/routes/authenticate.dart';
 import 'package:quizapp/routes/authentication_service.dart';
 
 class HomePage extends StatelessWidget {
