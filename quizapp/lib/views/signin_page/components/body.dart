@@ -45,20 +45,22 @@ class _BodyState extends State<Body> {
             ),
             SizedBox(height: size.height * 0.03),
             TextFieldContainer(
-                child: TextFormField(
-              controller: emailController,
-              validator: (value) {
-                return value.isEmpty ? "Enter your email" : null;
-              },
-              cursorColor: kPrimaryColor,
-              decoration: InputDecoration(
+              child: TextFormField(
+                controller: emailController,
+                validator: (value) {
+                  return value.isEmpty ? "Enter your email" : null;
+                },
+                cursorColor: kPrimaryColor,
+                decoration: InputDecoration(
                   hintText: 'Email',
                   border: InputBorder.none,
                   icon: Icon(
                     Icons.person,
                     color: kPrimaryColor,
-                  )),
-            )),
+                  ),
+                ),
+              ),
+            ),
             TextFieldContainer(
               child: TextFormField(
                 controller: passwordController,

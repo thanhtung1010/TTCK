@@ -34,8 +34,19 @@ class _ManagerBodyState extends State<ManagerBody> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Manager here'),
+        backgroundColor: Colors.blue[700],
       ),
-      body: list[_selectedIndex],
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [kPrimaryLightColor, navigationColor],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: [0.3, 1],
+          ),
+        ),
+        child: list[_selectedIndex],
+      ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
