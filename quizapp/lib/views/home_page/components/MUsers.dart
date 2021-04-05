@@ -98,6 +98,20 @@ class _AddUserState extends State<AddUser> {
     _myActivity = '';
   }
 
+  String country_id;
+  List<String> country = [
+    "America",
+    "Brazil",
+    "Canada",
+    "India",
+    "Mongalia",
+    "USA",
+    "China",
+    "Russia",
+    "Germany"
+  ];
+  String dropdownValue = 'Admin';
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -113,10 +127,10 @@ class _AddUserState extends State<AddUser> {
             children: <Widget>[
               TextFormField(
                 validator: (value) {
-                  return value.isEmpty ? "Email cannot be empty" : null;
+                  return value.isEmpty ? "MSHV cannot be empty" : null;
                 },
                 decoration: InputDecoration(
-                  labelText: 'Email',
+                  labelText: 'MSHV',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(26),
                   ),
@@ -141,10 +155,10 @@ class _AddUserState extends State<AddUser> {
               ),
               TextFormField(
                 validator: (value) {
-                  return value.isEmpty ? "First name cannot be empty" : null;
+                  return value.isEmpty ? "Email cannot be empty" : null;
                 },
                 decoration: InputDecoration(
-                  labelText: 'FirstName',
+                  labelText: 'Email',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(26),
                   ),
@@ -155,10 +169,10 @@ class _AddUserState extends State<AddUser> {
               ),
               TextFormField(
                 validator: (value) {
-                  return value.isEmpty ? "Last name cannot be empty" : null;
+                  return value.isEmpty ? "Name cannot be empty" : null;
                 },
                 decoration: InputDecoration(
-                  labelText: 'LastName',
+                  labelText: 'Name',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(26),
                   ),
@@ -167,66 +181,53 @@ class _AddUserState extends State<AddUser> {
               SizedBox(
                 height: size.height * 0.025,
               ),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Rule',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(26),
+              Container(
+                margin: const EdgeInsets.only(
+                  left: 5,
+                ),
+                alignment: Alignment.centerLeft,
+                child: DropdownButton<String>(
+                  value: dropdownValue,
+                  icon: const Icon(
+                    Icons.arrow_drop_down,
                   ),
+                  iconSize: 30,
+                  elevation: 15,
+                  underline: Container(
+                    height: 2,
+                    color: Colors.grey[300],
+                  ),
+                  onChanged: (String newvalue) {
+                    setState(() {
+                      dropdownValue = newvalue;
+                    });
+                  },
+                  items: <String>['Admin', 'User']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
               SizedBox(
                 height: size.height * 0.025,
               ),
-              DropDownFormField(
-                validator: (value) {
-                  return value.isEmpty ? "Last name cannot be empty" : null;
+              DropDownField(
+                onValueChanged: (dynamic value) {
+                  country_id = value;
                 },
-                titleText: 'Choose Courses',
-                hintText: 'Please choose one',
-                value: _myActivity,
-                onChanged: (value) {
-                  setState(() {
-                    _myActivity = value;
-                  });
-                },
-                onSaved: (value) {
-                  setState(() {
-                    _myActivity = value;
-                  });
-                },
-                dataSource: [
-                  {
-                    "display": "Running",
-                    "value": "Running",
-                  },
-                  {
-                    "display": "Climbing",
-                    "value": "Climbing",
-                  },
-                  {
-                    "display": "Walking",
-                    "value": "Walking",
-                  },
-                  {
-                    "display": "Swimming",
-                    "value": "Swimming",
-                  },
-                  {
-                    "display": "Soccer Practice",
-                    "value": "Soccer Practice",
-                  },
-                  {
-                    "display": "Baseball Practice",
-                    "value": "Baseball Practice",
-                  },
-                  {
-                    "display": "Football Practice",
-                    "value": "Football Practice",
-                  },
-                ],
-                textField: 'display',
-                valueField: 'value',
+                value: country_id,
+                required: true,
+                hintText: 'Find account with MSHV',
+                labelText: 'Choose course',
+                items: country,
               ),
               SizedBox(
                 height: size.height * 0.025,
@@ -292,14 +293,27 @@ class _DeleteUserState extends State<DeleteUser> {
                 },
                 value: country_id,
                 required: false,
-                hintText: 'Choose a email account',
-                labelText: 'Email',
+                hintText: 'Find account with MSHV',
+                labelText: 'MSHV',
                 items: country,
               ),
               SizedBox(
                 height: size.height * 0.025,
               ),
               TextFormField(
+                enabled: false,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(26),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: size.height * 0.025,
+              ),
+              TextFormField(
+                enabled: false,
                 obscureText: false,
                 decoration: InputDecoration(
                   labelText: 'Password',
@@ -312,8 +326,9 @@ class _DeleteUserState extends State<DeleteUser> {
                 height: size.height * 0.025,
               ),
               TextFormField(
+                enabled: false,
                 decoration: InputDecoration(
-                  labelText: 'FirstName',
+                  labelText: 'Name',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(26),
                   ),
@@ -323,28 +338,7 @@ class _DeleteUserState extends State<DeleteUser> {
                 height: size.height * 0.025,
               ),
               TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'LastName',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(26),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: size.height * 0.025,
-              ),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Rule',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(26),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: size.height * 0.025,
-              ),
-              TextFormField(
+                enabled: false,
                 decoration: InputDecoration(
                   labelText: 'Rule',
                   border: OutlineInputBorder(
@@ -416,9 +410,23 @@ class _UpdateUserState extends State<UpdateUser> {
                 },
                 value: country_id,
                 required: false,
-                hintText: 'Choose a email account',
-                labelText: 'Email',
+                hintText: 'Find acsount with MSHV',
+                labelText: 'MSHV',
                 items: country,
+              ),
+              SizedBox(
+                height: size.height * 0.025,
+              ),
+              TextFormField(
+                validator: (value) {
+                  return value.isEmpty ? "Email cannot be empty" : null;
+                },
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(26),
+                  ),
+                ),
               ),
               SizedBox(
                 height: size.height * 0.025,
@@ -439,24 +447,10 @@ class _UpdateUserState extends State<UpdateUser> {
               ),
               TextFormField(
                 validator: (value) {
-                  return value.isEmpty ? "First name cannot be empty" : null;
+                  return value.isEmpty ? "Name cannot be empty" : null;
                 },
                 decoration: InputDecoration(
-                  labelText: 'FirstName',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(26),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: size.height * 0.025,
-              ),
-              TextFormField(
-                validator: (value) {
-                  return value.isEmpty ? "Last name cannot be empty" : null;
-                },
-                decoration: InputDecoration(
-                  labelText: 'LastName',
+                  labelText: 'Name',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(26),
                   ),

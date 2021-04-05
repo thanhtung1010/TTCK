@@ -1,0 +1,12 @@
+user:
+	email
+	passord
+	MSHV
+	Name
+	rule
+	idCcourses
+courses:
+	name
+	description
+	img
+	idQuestion

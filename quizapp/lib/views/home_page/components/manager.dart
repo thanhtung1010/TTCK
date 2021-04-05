@@ -33,7 +33,7 @@ class _ManagerBodyState extends State<ManagerBody> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Manager here'),
+        title: Text('Manager'),
         backgroundColor: Colors.blue[700],
       ),
       body: Container(
