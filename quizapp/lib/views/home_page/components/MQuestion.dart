@@ -1,5 +1,6 @@
 import 'package:dropdownfield/dropdownfield.dart';
 import 'package:flutter/material.dart';
+import 'package:quizapp/models/question.dart';
 
 class MQuestion extends StatefulWidget {
   const MQuestion({Key key}) : super(key: key);
@@ -74,16 +75,22 @@ class AddQuestion extends StatefulWidget {
 }
 
 class _AddQuestionState extends State<AddQuestion> {
-  String _myActivity;
+  DataQuestions dataQuestions = new DataQuestions();
   final _formKey = GlobalKey<FormState>();
+  String questionText,
+      answer01,
+      answer02,
+      answer03,
+      answer04,
+      correctAnswer,
+      courseId;
+  bool _isLoading;
 
-  @override
-  void initState() {
-    super.initState();
-    _myActivity = '';
+  addQuestion() {
+    if (_formKey.currentState.validate()) {}
   }
 
-  String country_id;
+  String courseid;
   List<String> country = [
     "America",
     "Brazil",
@@ -110,9 +117,9 @@ class _AddQuestionState extends State<AddQuestion> {
             children: <Widget>[
               DropDownField(
                 onValueChanged: (dynamic value) {
-                  country_id = value;
+                  courseid = value;
                 },
-                value: country_id,
+                value: courseid,
                 required: true,
                 hintText: 'Find course with name',
                 labelText: 'Choose course',
@@ -131,6 +138,9 @@ class _AddQuestionState extends State<AddQuestion> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                 ),
+                onChanged: (val) {
+                  questionText = val;
+                },
               ),
               SizedBox(
                 height: size.height * 0.025,
@@ -147,6 +157,9 @@ class _AddQuestionState extends State<AddQuestion> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                 ),
+                onChanged: (val) {
+                  correctAnswer = val;
+                },
               ),
               SizedBox(
                 height: size.height * 0.025,
@@ -161,6 +174,9 @@ class _AddQuestionState extends State<AddQuestion> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                 ),
+                onChanged: (val) {
+                  answer01 = val;
+                },
               ),
               SizedBox(
                 height: size.height * 0.025,
@@ -175,6 +191,9 @@ class _AddQuestionState extends State<AddQuestion> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                 ),
+                onChanged: (val) {
+                  answer02 = val;
+                },
               ),
               SizedBox(
                 height: size.height * 0.025,
@@ -189,6 +208,9 @@ class _AddQuestionState extends State<AddQuestion> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                 ),
+                onChanged: (val) {
+                  answer03 = val;
+                },
               ),
               SizedBox(
                 height: size.height * 0.025,
@@ -203,14 +225,15 @@ class _AddQuestionState extends State<AddQuestion> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                 ),
+                onChanged: (val) {
+                  answer04 = val;
+                },
               ),
               SizedBox(
                 height: size.height * 0.025,
               ),
               FloatingActionButton(
-                onPressed: () => {
-                  _formKey.currentState.validate(),
-                },
+                onPressed: () => {},
                 child: Icon(Icons.done),
               ),
             ],
@@ -227,14 +250,7 @@ class UpdateQuestion extends StatefulWidget {
 }
 
 class _UpdateQuestionState extends State<UpdateQuestion> {
-  String _myActivity;
   final _formKey = GlobalKey<FormState>();
-
-  @override
-  void initState() {
-    super.initState();
-    _myActivity = '';
-  }
 
   String country_id;
   List<String> country = [

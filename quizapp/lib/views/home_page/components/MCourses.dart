@@ -1,8 +1,7 @@
-import 'dart:io';
 import 'package:dropdownfield/dropdownfield.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:quizapp/models/courses.dart';
+import 'package:random_string/random_string.dart';
 
 class MCourses extends StatefulWidget {
   const MCourses({Key key}) : super(key: key);
@@ -90,88 +89,121 @@ class AddCourses extends StatefulWidget {
 
 class _AddCoursesState extends State<AddCourses> {
   final _formKey = GlobalKey<FormState>();
-  File _image;
-  void pickImage() async {
-    PickedFile pickedFile =
-        await ImagePicker().getImage(source: ImageSource.gallery);
-    _image = File(pickedFile.path);
+  String courseName, courseDes, imgURL, courseId;
+  DataCourses dataCourses = new DataCourses();
+
+  bool _isLoading = false;
+
+  createCourses() async {
+    if (_formKey.currentState.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+      courseId = randomAlphaNumeric(20);
+      Map<String, String> coursesMap = {
+        "courseId": courseId,
+        "courseName": courseName,
+        "courseDes": courseDes,
+        "imgURL": imgURL,
+      };
+
+      await dataCourses.AddCourses(coursesMap, courseId).then((value) => {
+            setState(() {
+              _isLoading = false;
+            })
+          });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: 15.0,
-          horizontal: 5.0,
-        ),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              TextFormField(
-                validator: (value) {
-                  return value.isEmpty ? "Name Courses cannot be empty" : null;
-                },
-                decoration: InputDecoration(
-                  labelText: 'Name Courses',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(26),
-                  ),
-                ),
+      child: _isLoading
+          ? Container(
+              child: Center(
+                child: CircularProgressIndicator(),
               ),
-              SizedBox(
-                height: size.height * 0.025,
+            )
+          : Container(
+              padding: EdgeInsets.symmetric(
+                vertical: 15.0,
+                horizontal: 5.0,
               ),
-              TextFormField(
-                validator: (value) {
-                  return value.isEmpty
-                      ? "Description Courses cannot be empty"
-                      : null;
-                },
-                decoration: InputDecoration(
-                  labelText: 'Description',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(26),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: size.height * 0.025,
-              ),
-              Container(
-                width: size.width,
-                height: 100,
-                child: Scaffold(
-                  backgroundColor: Colors.grey,
-                  body: _image == null
-                      ? Center(
-                          child: Text('No image selected'),
-                        )
-                      : Image.file(_image),
-                  floatingActionButton: FloatingActionButton(
-                    onPressed: pickImage,
-                    child: Icon(
-                      Icons.camera_alt,
-                      size: 20,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    TextFormField(
+                      validator: (value) {
+                        return value.isEmpty
+                            ? "Name Courses cannot be empty"
+                            : null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Name Courses',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(26),
+                        ),
+                      ),
+                      onChanged: (val) {
+                        courseName = val;
+                      },
                     ),
-                  ),
+                    SizedBox(
+                      height: size.height * 0.025,
+                    ),
+                    TextFormField(
+                      validator: (value) {
+                        return value.isEmpty
+                            ? "Description Courses cannot be empty"
+                            : null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Description',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(26),
+                        ),
+                      ),
+                      onChanged: (val) {
+                        courseDes = val;
+                      },
+                    ),
+                    SizedBox(
+                      height: size.height * 0.025,
+                    ),
+                    TextFormField(
+                      validator: (value) {
+                        return value.isEmpty
+                            ? "Course image URL cannot be empty"
+                            : null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Course image URL',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(26),
+                        ),
+                      ),
+                      onChanged: (val) {
+                        imgURL = val;
+                      },
+                    ),
+                    SizedBox(
+                      height: size.height * 0.025,
+                    ),
+                    SizedBox(
+                      height: size.height * 0.025,
+                    ),
+                    FloatingActionButton(
+                      onPressed: () => {
+                        createCourses(),
+                      },
+                      child: Icon(Icons.done),
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(
-                height: size.height * 0.025,
-              ),
-              FloatingActionButton(
-                onPressed: () => {
-                  _formKey.currentState.validate(),
-                },
-                child: Icon(Icons.done),
-              ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }
@@ -262,12 +294,6 @@ class UpdateCourses extends StatefulWidget {
 
 class _UpdateCoursesState extends State<UpdateCourses> {
   final _formKey = GlobalKey<FormState>();
-  File _image;
-  void pickImage() async {
-    PickedFile pickedFile =
-        await ImagePicker().getImage(source: ImageSource.gallery);
-    _image = File(pickedFile.path);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -312,24 +338,21 @@ class _UpdateCoursesState extends State<UpdateCourses> {
               SizedBox(
                 height: size.height * 0.025,
               ),
-              Container(
-                width: size.width,
-                height: 100,
-                child: Scaffold(
-                  backgroundColor: Colors.grey,
-                  body: _image == null
-                      ? Center(
-                          child: Text('No image selected'),
-                        )
-                      : Image.file(_image),
-                  floatingActionButton: FloatingActionButton(
-                    onPressed: pickImage,
-                    child: Icon(
-                      Icons.camera_alt,
-                      size: 20,
-                    ),
+              TextFormField(
+                validator: (value) {
+                  return value.isEmpty
+                      ? "Courser image URL cannot be empty"
+                      : null;
+                },
+                decoration: InputDecoration(
+                  labelText: 'Courser image URL',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(26),
                   ),
                 ),
+              ),
+              SizedBox(
+                height: size.height * 0.025,
               ),
               SizedBox(
                 height: size.height * 0.025,
