@@ -4,6 +4,9 @@ class DataCourses {
   final CollectionReference courseList =
       FirebaseFirestore.instance.collection('Couses');
 
+  final DocumentReference nameCourseList =
+      FirebaseFirestore.instance.collection('Couses').doc('courseName');
+
   Future<void> AddCourses(Map courseData, String courseId) async {
     await FirebaseFirestore.instance
         .collection('Couses')
@@ -34,16 +37,46 @@ class DataCourses {
     }
   }
 
-  Future GetCourseListWithIdAndName() async {
-    List IdAndNameList = [];
+  Future GetIdCourses() async {
+    List CourseList = [];
 
     try {
       await courseList.get().then((querySnapshot) => {
             querySnapshot.docs.forEach((element) {
-              IdAndNameList.add(element.data());
+              CourseList.add(element.get('courseId'));
             }),
           });
-      return IdAndNameList;
+      return CourseList;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future GetNameCourseById(String cid) async {
+    String nameCourse;
+
+    try {
+      await courseList.doc(cid).get().then((DocumentSnapshot doc) => {
+            nameCourse = doc.get('courseName'),
+          });
+      return nameCourse;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future GetNameCourses() async {
+    List CourseList = [];
+
+    try {
+      await courseList.get().then((querySnapshot) => {
+            querySnapshot.docs.forEach((element) {
+              CourseList.add(element.get('courseName'));
+            }),
+          });
+      return CourseList;
     } catch (e) {
       print(e.toString());
       return null;
