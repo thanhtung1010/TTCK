@@ -38,7 +38,7 @@ class DataCourses {
   }
 
   Future GetIdCourses() async {
-    List CourseList = [];
+    List<String> CourseList = [];
 
     try {
       await courseList.get().then((querySnapshot) => {

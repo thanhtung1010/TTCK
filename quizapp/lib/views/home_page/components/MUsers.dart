@@ -1,6 +1,7 @@
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:dropdownfield/dropdownfield.dart';
 import 'package:flutter/material.dart';
+import 'package:quizapp/models/courses.dart';
 
 class MUser extends StatefulWidget {
   const MUser({Key key}) : super(key: key);
@@ -89,28 +90,31 @@ class AddUser extends StatefulWidget {
 }
 
 class _AddUserState extends State<AddUser> {
-  String _myActivity;
   final _formKey = GlobalKey<FormState>();
+  String MSHV, password, email, name;
+  int rule;
 
+  List CourseIdList = [];
+  String courseId;
   @override
   void initState() {
     super.initState();
-    _myActivity = '';
+    fecthIdCourseList();
   }
 
-  String country_id;
-  List<String> country = [
-    "America",
-    "Brazil",
-    "Canada",
-    "India",
-    "Mongalia",
-    "USA",
-    "China",
-    "Russia",
-    "Germany"
-  ];
-  String dropdownValue = 'Admin';
+  fecthIdCourseList() async {
+    dynamic resultant = await DataCourses().GetIdCourses();
+
+    if (resultant == null) {
+      print('Unable to get course');
+    } else {
+      setState(() {
+        CourseIdList = resultant;
+      });
+    }
+  }
+
+  String dropdownValue;
 
   @override
   Widget build(BuildContext context) {
@@ -200,6 +204,13 @@ class _AddUserState extends State<AddUser> {
                   onChanged: (String newvalue) {
                     setState(() {
                       dropdownValue = newvalue;
+                      if (dropdownValue == 'Admin') {
+                        setState(() {
+                          rule = 0;
+                        });
+                      } else {
+                        rule = 1;
+                      }
                     });
                   },
                   items: <String>['Admin', 'User']
@@ -221,20 +232,20 @@ class _AddUserState extends State<AddUser> {
               ),
               DropDownField(
                 onValueChanged: (dynamic value) {
-                  country_id = value;
+                  courseId = value;
                 },
-                value: country_id,
+                value: courseId,
                 required: true,
-                hintText: 'Find account with MSHV',
-                labelText: 'Choose course',
-                items: country,
+                hintText: 'Choose your course',
+                labelText: 'Course',
+                items: CourseIdList,
               ),
               SizedBox(
                 height: size.height * 0.025,
               ),
               FloatingActionButton(
                 onPressed: () => {
-                  _formKey.currentState.validate(),
+                  print(rule),
                 },
                 child: Icon(Icons.done),
               ),

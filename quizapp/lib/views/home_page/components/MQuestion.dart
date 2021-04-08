@@ -1,6 +1,7 @@
 import 'package:dropdownfield/dropdownfield.dart';
 import 'package:flutter/material.dart';
 import 'package:quizapp/models/question.dart';
+import 'package:quizapp/models/courses.dart';
 
 class MQuestion extends StatefulWidget {
   const MQuestion({Key key}) : super(key: key);
@@ -77,169 +78,202 @@ class AddQuestion extends StatefulWidget {
 class _AddQuestionState extends State<AddQuestion> {
   DataQuestions dataQuestions = new DataQuestions();
   final _formKey = GlobalKey<FormState>();
-  String questionText,
-      answer01,
-      answer02,
-      answer03,
-      answer04,
-      correctAnswer,
-      courseId;
-  bool _isLoading;
+  String questionText, answer01, answer02, answer03, answer04, courseName;
+  String _courseid;
+  bool _isLoading = false;
 
-  addQuestion() {
-    if (_formKey.currentState.validate()) {}
+  List CourseIdList = [];
+  @override
+  void initState() {
+    super.initState();
+    fecthIdCourseList();
+    fecthNameCourseById();
   }
 
-  String courseid;
-  List<String> country = [
-    "America",
-    "Brazil",
-    "Canada",
-    "India",
-    "Mongalia",
-    "USA",
-    "China",
-    "Russia",
-    "Germany"
-  ];
+  fecthIdCourseList() async {
+    dynamic resultant = await DataCourses().GetIdCourses();
+
+    if (resultant == null) {
+      print('Unable to get course');
+    } else {
+      setState(() {
+        CourseIdList = resultant;
+      });
+    }
+  }
+
+  fecthNameCourseById() async {
+    String resultant = await DataCourses().GetNameCourseById(_courseid);
+
+    if (resultant == null) {
+      print('Unable to get name');
+    } else {
+      setState(() {
+        courseName = resultant;
+      });
+    }
+  }
+
+  addQuestion() async {
+    if (_formKey.currentState.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      Map<String, String> questionMap = {
+        'questionText': questionText,
+        'answer01': answer01,
+        'answer02': answer02,
+        'answer03': answer03,
+        'answer04': answer04,
+      };
+
+      dataQuestions.AddQuestion(questionMap, _courseid).then((value) => {
+            setState(() {
+              _isLoading = false;
+            })
+          });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: 15.0,
-          horizontal: 5.0,
-        ),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              DropDownField(
-                onValueChanged: (dynamic value) {
-                  courseid = value;
-                },
-                value: courseid,
-                required: true,
-                hintText: 'Find course with name',
-                labelText: 'Choose course',
-                items: country,
+      child: _isLoading
+          ? Container(
+              child: Center(
+                child: CircularProgressIndicator(),
               ),
-              SizedBox(
-                height: size.height * 0.025,
+            )
+          : Container(
+              padding: EdgeInsets.symmetric(
+                vertical: 15.0,
+                horizontal: 5.0,
               ),
-              TextFormField(
-                validator: (value) {
-                  return value.isEmpty ? "Question Text cannot be empty" : null;
-                },
-                decoration: InputDecoration(
-                  labelText: 'Question Text',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(26),
-                  ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    DropDownField(
+                      value: _courseid,
+                      required: true,
+                      strict: true,
+                      labelText: 'Choose your course',
+                      hintText: 'Course',
+                      items: CourseIdList,
+                      onValueChanged: (dynamic newId) {
+                        _courseid = newId;
+                      },
+                    ),
+                    SizedBox(
+                      height: size.height * 0.025,
+                    ),
+                    TextFormField(
+                      validator: (value) {
+                        return value.isEmpty
+                            ? "Question Text cannot be empty"
+                            : null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Question Text',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(26),
+                        ),
+                      ),
+                      onChanged: (val) {
+                        questionText = val;
+                      },
+                    ),
+                    SizedBox(
+                      height: size.height * 0.025,
+                    ),
+                    TextFormField(
+                      validator: (value) {
+                        return value.isEmpty
+                            ? "Answer01 cannot be empty"
+                            : null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Answer01 (Correct answer)',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(26),
+                        ),
+                      ),
+                      onChanged: (val) {
+                        answer01 = val;
+                      },
+                    ),
+                    SizedBox(
+                      height: size.height * 0.025,
+                    ),
+                    TextFormField(
+                      validator: (value) {
+                        return value.isEmpty
+                            ? "Answer02 cannot be empty"
+                            : null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Answer02',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(26),
+                        ),
+                      ),
+                      onChanged: (val) {
+                        answer02 = val;
+                      },
+                    ),
+                    SizedBox(
+                      height: size.height * 0.025,
+                    ),
+                    TextFormField(
+                      validator: (value) {
+                        return value.isEmpty
+                            ? "Answer03 cannot be empty"
+                            : null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Answer03',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(26),
+                        ),
+                      ),
+                      onChanged: (val) {
+                        answer03 = val;
+                      },
+                    ),
+                    SizedBox(
+                      height: size.height * 0.025,
+                    ),
+                    TextFormField(
+                      validator: (value) {
+                        return value.isEmpty
+                            ? "Answer04 cannot be empty"
+                            : null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Answer04',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(26),
+                        ),
+                      ),
+                      onChanged: (val) {
+                        answer04 = val;
+                      },
+                    ),
+                    SizedBox(
+                      height: size.height * 0.025,
+                    ),
+                    FloatingActionButton(
+                      onPressed: () => {
+                        addQuestion(),
+                      },
+                      child: Icon(Icons.done),
+                    ),
+                  ],
                 ),
-                onChanged: (val) {
-                  questionText = val;
-                },
               ),
-              SizedBox(
-                height: size.height * 0.025,
-              ),
-              TextFormField(
-                validator: (value) {
-                  return value.isEmpty
-                      ? "Correct Answer cannot be empty"
-                      : null;
-                },
-                decoration: InputDecoration(
-                  labelText: 'Correct Answer',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(26),
-                  ),
-                ),
-                onChanged: (val) {
-                  correctAnswer = val;
-                },
-              ),
-              SizedBox(
-                height: size.height * 0.025,
-              ),
-              TextFormField(
-                validator: (value) {
-                  return value.isEmpty ? "Answer01 cannot be empty" : null;
-                },
-                decoration: InputDecoration(
-                  labelText: 'Answer01',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(26),
-                  ),
-                ),
-                onChanged: (val) {
-                  answer01 = val;
-                },
-              ),
-              SizedBox(
-                height: size.height * 0.025,
-              ),
-              TextFormField(
-                validator: (value) {
-                  return value.isEmpty ? "Answer02 cannot be empty" : null;
-                },
-                decoration: InputDecoration(
-                  labelText: 'Answer02',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(26),
-                  ),
-                ),
-                onChanged: (val) {
-                  answer02 = val;
-                },
-              ),
-              SizedBox(
-                height: size.height * 0.025,
-              ),
-              TextFormField(
-                validator: (value) {
-                  return value.isEmpty ? "Answer03 cannot be empty" : null;
-                },
-                decoration: InputDecoration(
-                  labelText: 'Answer03',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(26),
-                  ),
-                ),
-                onChanged: (val) {
-                  answer03 = val;
-                },
-              ),
-              SizedBox(
-                height: size.height * 0.025,
-              ),
-              TextFormField(
-                validator: (value) {
-                  return value.isEmpty ? "Answer04 cannot be empty" : null;
-                },
-                decoration: InputDecoration(
-                  labelText: 'Answer04',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(26),
-                  ),
-                ),
-                onChanged: (val) {
-                  answer04 = val;
-                },
-              ),
-              SizedBox(
-                height: size.height * 0.025,
-              ),
-              FloatingActionButton(
-                onPressed: () => {},
-                child: Icon(Icons.done),
-              ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }
