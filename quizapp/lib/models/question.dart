@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DataQuestions {
@@ -100,20 +98,15 @@ class DataQuestions {
     List QuestionList = [];
 
     try {
-      await questionLimitList
-          .orderBy('questionID')
-          .get()
-          .then((querySnapshot) => {
-                querySnapshot.docs.forEach((element) {
-                  QuestionList.add(element.get('questionID'));
-                }),
-              });
+      await questionLimitList.get().then((querySnapshot) => {
+            querySnapshot.docs.forEach((element) {
+              QuestionList.add(element.get('questionID'));
+            }),
+          });
       return QuestionList;
     } catch (e) {
       print(e.toString());
       return null;
     }
   }
-
-  GetQuestionById(String questionId) {}
 }
