@@ -33,7 +33,13 @@ class _ManagerBodyState extends State<ManagerBody> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Manager'),
+        title: Text(
+          'Manager',
+          style: TextStyle(
+            fontFamily: 'Avenir',
+            fontSize: 25,
+          ),
+        ),
         backgroundColor: Colors.blue[700],
       ),
       body: Container(

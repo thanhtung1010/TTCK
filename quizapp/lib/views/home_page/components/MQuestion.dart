@@ -2,6 +2,7 @@ import 'package:dropdownfield/dropdownfield.dart';
 import 'package:flutter/material.dart';
 import 'package:quizapp/models/question.dart';
 import 'package:quizapp/models/courses.dart';
+import 'package:random_string/random_string.dart';
 
 class MQuestion extends StatefulWidget {
   const MQuestion({Key key}) : super(key: key);
@@ -78,7 +79,14 @@ class AddQuestion extends StatefulWidget {
 class _AddQuestionState extends State<AddQuestion> {
   DataQuestions dataQuestions = new DataQuestions();
   final _formKey = GlobalKey<FormState>();
-  String questionText, answer01, answer02, answer03, answer04, courseName;
+  String questionId,
+      questionText,
+      answer01,
+      answer02,
+      answer03,
+      answer04,
+      courseName;
+  String imgURL = '';
   String _courseid;
   bool _isLoading = false;
 
@@ -119,20 +127,23 @@ class _AddQuestionState extends State<AddQuestion> {
       setState(() {
         _isLoading = true;
       });
-
+      questionId = randomAlphaNumeric(20);
       Map<String, String> questionMap = {
+        'questionID': questionId,
         'questionText': questionText,
+        'questionImgURL': imgURL,
         'answer01': answer01,
         'answer02': answer02,
         'answer03': answer03,
         'answer04': answer04,
       };
 
-      dataQuestions.AddQuestion(questionMap, _courseid).then((value) => {
-            setState(() {
-              _isLoading = false;
-            })
-          });
+      dataQuestions.AddQuestion(questionMap, questionId, _courseid)
+          .then((value) => {
+                setState(() {
+                  _isLoading = false;
+                })
+              });
     }
   }
 
@@ -259,6 +270,20 @@ class _AddQuestionState extends State<AddQuestion> {
                       ),
                       onChanged: (val) {
                         answer04 = val;
+                      },
+                    ),
+                    SizedBox(
+                      height: size.height * 0.025,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Image URL',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(26),
+                        ),
+                      ),
+                      onChanged: (val) {
+                        imgURL = val;
                       },
                     ),
                     SizedBox(

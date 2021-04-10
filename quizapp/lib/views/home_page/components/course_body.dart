@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:quizapp/models/courses.dart';
 import 'package:quizapp/views/Constants.dart';
+import 'package:quizapp/views/play_quiz/play_quiz.dart';
 
 class CourseBody extends StatefulWidget {
   @override
@@ -98,7 +99,6 @@ class _CourseBodyState extends State<CourseBody> {
                         ),
                         itemBuilder: (context, index) {
                           return InkWell(
-                            onTap: () {},
                             child: Stack(
                               children: <Widget>[
                                 Column(
@@ -142,23 +142,34 @@ class _CourseBodyState extends State<CourseBody> {
                                               textAlign: TextAlign.left,
                                             ),
                                             SizedBox(height: 32),
-                                            Row(
-                                              children: <Widget>[
-                                                Text(
-                                                  'Get started !!',
-                                                  style: TextStyle(
-                                                    fontFamily: 'Avenir',
-                                                    fontSize: 18,
-                                                    color: secondaryTextColor,
-                                                    fontWeight: FontWeight.w500,
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            PlayQuiz(
+                                                                '${CourseInfos[index]['courseId']}')));
+                                              },
+                                              child: Row(
+                                                children: <Widget>[
+                                                  Text(
+                                                    'Get start',
+                                                    style: TextStyle(
+                                                      fontFamily: 'Avenir',
+                                                      fontSize: 15,
+                                                      color: secondaryTextColor,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                    textAlign: TextAlign.left,
                                                   ),
-                                                  textAlign: TextAlign.left,
-                                                ),
-                                                Icon(
-                                                  Icons.arrow_forward,
-                                                  color: secondaryTextColor,
-                                                ),
-                                              ],
+                                                  Icon(
+                                                    Icons.arrow_forward,
+                                                    color: secondaryTextColor,
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ],
                                         ),
