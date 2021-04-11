@@ -14,38 +14,49 @@ class OptionTitle extends StatefulWidget {
 class _OptionTitleState extends State<OptionTitle> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                  color: widget.description == widget.optionSelected
-                      ? widget.optionSelected == widget.correctAnswer
-                          ? Colors.green.withOpacity(0.7)
-                          : Colors.red.withOpacity(0.7)
-                      : Colors.grey),
+    Size size = MediaQuery.of(context).size;
+    return Row(
+      children: [
+        Container(
+          height: 25,
+          width: 25,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: widget.description == widget.optionSelected
+                  ? widget.optionSelected == widget.correctAnswer
+                      ? Colors.green.withOpacity(0.7)
+                      : Colors.red.withOpacity(0.7)
+                  : Colors.grey,
+              width: 2.0,
             ),
-            child: Text(
-              '${widget.option}',
-              style: TextStyle(
-                color: widget.optionSelected == widget.description
-                    ? widget.correctAnswer == widget.optionSelected
-                        ? Colors.green.withOpacity(0.7)
-                        : Colors.red.withOpacity(0.7)
-                    : Colors.grey,
-              ),
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: Text(
+            '${widget.option}',
+            style: TextStyle(
+              color: widget.optionSelected == widget.description
+                  ? widget.correctAnswer == widget.optionSelected
+                      ? Colors.green.withOpacity(0.7)
+                      : Colors.red.withOpacity(0.7)
+                  : Colors.grey,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          Text(
+        ),
+        SizedBox(
+          width: size.width * 0.02,
+        ),
+        Flexible(
+          child: Text(
             widget.description,
             style: TextStyle(
               fontSize: 17,
               color: Colors.black54,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
