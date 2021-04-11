@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:quizapp/models/question.dart';
 import 'package:quizapp/views/play_quiz/components/question_model.dart';
 import 'package:quizapp/views/play_quiz/components/quiz_play_widget.dart';
+import 'package:quizapp/views/play_quiz/components/result.dart';
 
 class PlayQuiz extends StatefulWidget {
   final String courseId;
@@ -12,8 +13,8 @@ class PlayQuiz extends StatefulWidget {
 }
 
 int total = 0;
-int _corect = 0;
-int _incorect = 0;
+int _correct = 0;
+int _incorrect = 0;
 int _notAttempted = 0;
 
 class _PlayQuizState extends State<PlayQuiz> {
@@ -53,10 +54,8 @@ class _PlayQuizState extends State<PlayQuiz> {
   void initState() {
     super.initState();
     fecth20QuestionList('${widget.courseId}');
-    int _corect = 0;
-    int _incorect = 0;
-    int _notAttempted = 0;
-    int total = NewQuestionList.length;
+    _correct = 0;
+    _incorrect = 0;
   }
 
   fecth20QuestionList(String id) async {
@@ -79,6 +78,8 @@ class _PlayQuizState extends State<PlayQuiz> {
         NewQuestionList.add(QuestionList[randomNumber]);
       });
     }
+    total = NewQuestionList.length;
+    _notAttempted = NewQuestionList.length;
   }
 
   @override
@@ -100,6 +101,18 @@ class _PlayQuizState extends State<PlayQuiz> {
                 );
               },
             ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.check),
+        onPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Result(
+                  correct: _correct, incorrect: _incorrect, total: total),
+            ),
+          );
+        },
+      ),
     );
   }
 }
@@ -140,15 +153,17 @@ class _QuizPlayState extends State<QuizPlay> {
                   widget.questionModel.correctAnswer) {
                 optionSelected = widget.questionModel.answer01;
                 widget.questionModel.aswered = true;
-                _corect += 1;
-                _notAttempted -= 1;
-                setState(() {});
+                setState(() {
+                  _correct += 1;
+                  _notAttempted -= 1;
+                });
               } else {
                 optionSelected = widget.questionModel.answer01;
                 widget.questionModel.aswered = true;
-                _incorect += 1;
-                _notAttempted -= 1;
-                setState(() {});
+                setState(() {
+                  _incorrect += 1;
+                  _notAttempted -= 1;
+                });
               }
             }
           },
@@ -169,15 +184,17 @@ class _QuizPlayState extends State<QuizPlay> {
                   widget.questionModel.correctAnswer) {
                 optionSelected = widget.questionModel.answer02;
                 widget.questionModel.aswered = true;
-                _corect += 1;
-                _notAttempted -= 1;
-                setState(() {});
+                setState(() {
+                  _correct += 1;
+                  _notAttempted -= 1;
+                });
               } else {
                 optionSelected = widget.questionModel.answer02;
                 widget.questionModel.aswered = true;
-                _incorect += 1;
-                _notAttempted -= 1;
-                setState(() {});
+                setState(() {
+                  _incorrect += 1;
+                  _notAttempted -= 1;
+                });
               }
             }
           },
@@ -198,15 +215,17 @@ class _QuizPlayState extends State<QuizPlay> {
                   widget.questionModel.correctAnswer) {
                 optionSelected = widget.questionModel.answer03;
                 widget.questionModel.aswered = true;
-                _corect += 1;
-                _notAttempted -= 1;
-                setState(() {});
+                setState(() {
+                  _correct += 1;
+                  _notAttempted -= 1;
+                });
               } else {
                 optionSelected = widget.questionModel.answer03;
                 widget.questionModel.aswered = true;
-                _incorect += 1;
-                _notAttempted -= 1;
-                setState(() {});
+                setState(() {
+                  _incorrect += 1;
+                  _notAttempted -= 1;
+                });
               }
             }
           },
@@ -227,15 +246,17 @@ class _QuizPlayState extends State<QuizPlay> {
                   widget.questionModel.correctAnswer) {
                 optionSelected = widget.questionModel.answer04;
                 widget.questionModel.aswered = true;
-                _corect += 1;
-                _notAttempted -= 1;
-                setState(() {});
+                setState(() {
+                  _correct += 1;
+                  _notAttempted -= 1;
+                });
               } else {
                 optionSelected = widget.questionModel.answer04;
                 widget.questionModel.aswered = true;
-                _incorect += 1;
-                _notAttempted -= 1;
-                setState(() {});
+                setState(() {
+                  _incorrect += 1;
+                  _notAttempted -= 1;
+                });
               }
             }
           },
