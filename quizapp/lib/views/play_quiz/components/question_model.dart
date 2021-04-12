@@ -1,5 +1,6 @@
 class QuestionModel {
   String questionText;
+  String questionImgURL;
   String answer01;
   String answer02;
   String answer03;

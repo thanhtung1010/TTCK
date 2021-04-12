@@ -147,9 +147,9 @@ class _CourseBodyState extends State<CourseBody> {
                                                 Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            PlayQuiz(
-                                                                '${CourseInfos[index]['courseId']}')));
+                                                        builder: (context) => PlayQuiz(
+                                                            '${CourseInfos[index]['courseId']}',
+                                                            '${CourseInfos[index]['courseName']}')));
                                               },
                                               child: Row(
                                                 children: <Widget>[

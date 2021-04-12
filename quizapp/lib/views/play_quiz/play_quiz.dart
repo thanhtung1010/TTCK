@@ -1,13 +1,14 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:quizapp/models/courses.dart';
 import 'package:quizapp/models/question.dart';
 import 'package:quizapp/views/play_quiz/components/question_model.dart';
 import 'package:quizapp/views/play_quiz/components/quiz_play_widget.dart';
 import 'package:quizapp/views/play_quiz/components/result.dart';
 
 class PlayQuiz extends StatefulWidget {
-  final String courseId;
-  PlayQuiz(this.courseId);
+  final String courseId, courseName;
+  PlayQuiz(this.courseId, this.courseName);
   @override
   _PlayQuizState createState() => _PlayQuizState();
 }
@@ -29,6 +30,7 @@ class _PlayQuizState extends State<PlayQuiz> {
   QuestionModel getQuestionModelFromNewList(List NewQuestionList, int index) {
     QuestionModel questionModel = new QuestionModel();
     questionModel.questionText = NewQuestionList[index]['questionText'];
+    questionModel.questionImgURL = NewQuestionList[index]['questionImgURL'];
 
     List<String> answers = [
       NewQuestionList[index]['answer01'],
@@ -84,34 +86,108 @@ class _PlayQuizState extends State<PlayQuiz> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: NewQuestionList == null
-          ? Container()
-          : ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
-              itemCount: NewQuestionList.length,
-              itemBuilder: (context, index) {
-                return QuizPlay(
-                  questionModel:
-                      getQuestionModelFromNewList(NewQuestionList, index),
-                  index: index,
-                );
-              },
+    return WillPopScope(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text(
+            '${widget.courseName} total',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 30.0,
+              fontFamily: 'Avenir',
             ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.check),
-        onPressed: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Result(
-                  correct: _correct, incorrect: _incorrect, total: total),
+            textAlign: TextAlign.center,
+          ),
+          leading: GestureDetector(
+            onTap: () => {
+              showCloseDialog(),
+            },
+            child: Icon(
+              Icons.arrow_back,
+              size: 30.0,
             ),
-          );
-        },
+          ),
+        ),
+        body: NewQuestionList == null
+            ? Container()
+            : Container(
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
+                  itemCount: NewQuestionList.length,
+                  itemBuilder: (context, index) {
+                    return QuizPlay(
+                      questionModel:
+                          getQuestionModelFromNewList(NewQuestionList, index),
+                      index: index,
+                    );
+                  },
+                ),
+              ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.check),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Result(
+                    correct: _correct, incorrect: _incorrect, total: total),
+              ),
+            );
+          },
+        ),
+      ),
+      onWillPop: () async {
+        return false;
+      },
+    );
+  }
+
+  showCloseDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => new AlertDialog(
+        title: Text(
+          'Close',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 25.0,
+          ),
+        ),
+        content: Text(
+          'Are you sure to cancel this total',
+          style: TextStyle(
+            fontSize: 20.0,
+            color: Colors.grey,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, false);
+            },
+            child: Text(
+              'No',
+              style: TextStyle(
+                fontSize: 15.0,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.pop(context);
+            },
+            child: Text(
+              'Yes',
+              style: TextStyle(
+                fontSize: 15.0,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
