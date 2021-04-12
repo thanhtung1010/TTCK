@@ -1,10 +1,12 @@
 import 'dart:math';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:quizapp/models/courses.dart';
 import 'package:quizapp/models/question.dart';
 import 'package:quizapp/views/play_quiz/components/question_model.dart';
 import 'package:quizapp/views/play_quiz/components/quiz_play_widget.dart';
 import 'package:quizapp/views/play_quiz/components/result.dart';
+import 'package:quizapp/views/play_quiz/components/use_answer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PlayQuiz extends StatefulWidget {
   final String courseId, courseName;
@@ -24,11 +26,16 @@ class _PlayQuizState extends State<PlayQuiz> {
   Random random = new Random();
   int randomNumber;
   String value;
+  int indexPage = 0;
+  CarouselController buttonCarouselController = CarouselController();
+  SharedPreferences pref;
+  List<UserAnswer> userAnswers = new List<UserAnswer>();
 
   DataQuestions dataQuestions;
 
-  QuestionModel getQuestionModelFromNewList(List NewQuestionList, int index) {
+  getQuestionModelFromNewList(List NewQuestionList, int index) {
     QuestionModel questionModel = new QuestionModel();
+    questionModel.questionID = NewQuestionList[index]['questionID'];
     questionModel.questionText = NewQuestionList[index]['questionText'];
     questionModel.questionImgURL = NewQuestionList[index]['questionImgURL'];
 
@@ -109,23 +116,21 @@ class _PlayQuizState extends State<PlayQuiz> {
             ),
           ),
         ),
-        body: NewQuestionList == null
-            ? Container()
-            : Container(
-                child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
-                  itemCount: NewQuestionList.length,
-                  itemBuilder: (context, index) {
-                    return QuizPlay(
-                      questionModel:
-                          getQuestionModelFromNewList(NewQuestionList, index),
-                      index: index,
-                    );
-                  },
-                ),
-              ),
+        body: Container(
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            shrinkWrap: true,
+            physics: ClampingScrollPhysics(),
+            itemCount: NewQuestionList.length,
+            itemBuilder: (context, index) {
+              return QuizPlay(
+                questionModel:
+                    getQuestionModelFromNewList(NewQuestionList, index),
+                index: index,
+              );
+            },
+          ),
+        ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.check),
           onPressed: () {
