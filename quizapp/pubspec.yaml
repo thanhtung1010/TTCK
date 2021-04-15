@@ -33,9 +33,11 @@ dependencies:
   firebase_database: "^6.0.0"
   cloud_firestore: "^0.16.0+1"
   google_sign_in: ^4.1.1
-  flutter_riverpod: ^0.12.4
+
   shared_preferences: ^2.0.5
   carousel_slider: ^3.0.0
+  state_notifier: ^0.5.0
+
   random_string: ^2.1.0
   flutter_svg: ^0.19.3
   flutter_swiper : ^1.1.6

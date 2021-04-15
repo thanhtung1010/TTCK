@@ -4,6 +4,7 @@ import 'package:quizapp/views/Constants.dart';
 import 'package:quizapp/views/components/rounded_button.dart';
 import 'package:quizapp/views/signin_page/signin_page.dart';
 import 'package:quizapp/views/welcome_page/components/background.dart';
+import 'package:quizapp/views/welcome_page/components/slide_show.dart';
 
 class Body extends StatelessWidget {
   @override
@@ -15,17 +16,10 @@ class Body extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'Welcome to CICT Quiz App',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
             SizedBox(
               height: size.height * 0.05,
             ),
-            SvgPicture.asset(
-              'assets/icons/chat.svg',
-              height: size.height * 0.45,
-            ),
+            SlideShow(),
             SizedBox(
               height: size.height * 0.05,
             ),
@@ -42,10 +36,12 @@ class Body extends StatelessWidget {
                 );
               },
             ),
+            SizedBox(
+              height: size.height * 0.015,
+            ),
             RoundedButton(
               text: 'MORE INF',
-              color: kPrimaryLightColor,
-              textColor: Colors.black,
+              color: Colors.blue[900],
               press: () {},
             ),
           ],

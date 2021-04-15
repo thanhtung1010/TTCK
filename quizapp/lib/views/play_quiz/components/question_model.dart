@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class QuestionModel {
   String questionID;
   String questionText;
@@ -8,4 +10,16 @@ class QuestionModel {
   String answer04;
   String correctAnswer;
   bool aswered;
+
+  // QuestionModel({
+  //   @required this.questionID,
+  //   @required this.questionText,
+  //   @required this.questionImgURL,
+  //   @required this.answer01,
+  //   @required this.answer02,
+  //   @required this.answer03,
+  //   @required this.answer04,
+  //   @required this.correctAnswer,
+  //   @required this.aswered,
+  // });
 }
