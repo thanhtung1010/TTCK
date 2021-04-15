@@ -1,0 +1,30 @@
+flutter emulators --launch Pixel_3a_API_30_x86
+
+flutter emulators --launch Nexus 5X API 30
+
+flutter emulators --launch Nexus_6_API_29
+
+
+logo: 	word
+	exel
+	ppt
+	(co ban, nang cao)
+	setting, setup computer
+	Ps
+	CorelDraw
+	Ai
+	manager
+	web(FE, BE)
+	
+data:
+
+account:
+	manager
+	user
+		ID, username, password, rules, name, phonenumber, email.
+
+category:
+	ID, name
+	
+questions:
+	ID, IDcategory, level, questionText, questionImg, answers ( text;score, text;score, text;score, text;score), 
