@@ -11,19 +11,19 @@ List<imgList> imgLists = [
     text: 'Welcome to CICT Quiz App',
   ),
   imgList(
-    imgURL: 'assets/images/9814.jpg',
+    imgURL: 'assets/images/9814.png',
     text: 'Comfortable',
   ),
   imgList(
-    imgURL: 'assets/images/3254659.jpg',
+    imgURL: 'assets/images/3254656.png',
     text: 'Friendly',
   ),
   imgList(
-    imgURL: 'assets/images/20943566.jpg',
+    imgURL: 'assets/images/20943566.png',
     text: 'Teamwork',
   ),
   imgList(
-    imgURL: 'assets/images/9812.jpg',
+    imgURL: 'assets/images/9812.png',
     text: 'Level up',
   ),
 ];

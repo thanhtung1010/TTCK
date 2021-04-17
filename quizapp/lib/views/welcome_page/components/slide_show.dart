@@ -17,11 +17,11 @@ class SlideShow extends StatelessWidget {
               index == 0
                   ? SvgPicture.asset(
                       imgLists[index].imgURL,
-                      height: size.height * 0.45,
+                      height: size.height * 0.5,
                     )
                   : Image.asset(
                       imgLists[index].imgURL,
-                      height: size.height * 0.45,
+                      height: size.height * 0.5,
                     ),
               SizedBox(
                 height: size.height * 0.05,
@@ -29,7 +29,7 @@ class SlideShow extends StatelessWidget {
               Text(
                 imgLists[index].text,
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.left,
@@ -38,11 +38,11 @@ class SlideShow extends StatelessWidget {
           );
         },
         options: CarouselOptions(
-          height: size.height * 0.6,
+          height: size.height * 0.65,
           viewportFraction: 1.0,
           enlargeCenterPage: false,
           enableInfiniteScroll: true,
-          autoPlay: true,
+          autoPlay: false,
           autoPlayInterval: Duration(seconds: 3),
           autoPlayAnimationDuration: Duration(milliseconds: 1500),
           autoPlayCurve: Curves.fastOutSlowIn,

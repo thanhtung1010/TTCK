@@ -3,10 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:quizapp/routes/authentication_service.dart';
 import 'package:quizapp/views/Constants.dart';
-import 'package:quizapp/views/components/forgot_password.dart';
 import 'package:quizapp/views/components/rounded_button.dart';
 import 'package:quizapp/views/components/text_field_container.dart';
-import 'package:quizapp/views/forgot_password_page/forgot_password_page.dart';
 import 'package:quizapp/views/signin_page/components/background.dart';
 
 class Body extends StatefulWidget {
@@ -43,7 +41,7 @@ class _BodyState extends State<Body> {
               "assets/icons/login.svg",
               height: size.height * 0.35,
             ),
-            SizedBox(height: size.height * 0.03),
+            SizedBox(height: size.height * 0.05),
             TextFieldContainer(
               child: TextFormField(
                 controller: emailController,
@@ -92,22 +90,13 @@ class _BodyState extends State<Body> {
                 ),
               ),
             ),
+            SizedBox(height: size.height * 0.05),
             RoundedButton(
               text: "SIGN IN",
               press: () {
                 context.read<AuthenticationService>().signIn(
                     email: emailController.text.trim(),
                     password: passwordController.text.trim());
-              },
-            ),
-            SizedBox(height: size.height * 0.03),
-            ForgotPassword(
-              text: 'Sign Up!',
-              press: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ForgotPasswordPage()));
               },
             ),
           ],
