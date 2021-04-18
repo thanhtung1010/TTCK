@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/routes/authentication_service.dart';
@@ -6,6 +7,16 @@ import 'package:quizapp/views/Constants.dart';
 class InformationBody extends StatefulWidget {
   @override
   _InformationBodyState createState() => _InformationBodyState();
+}
+
+FirebaseAuth auth = FirebaseAuth.instance;
+AuthenticationService _auth = new AuthenticationService(FirebaseAuth.instance);
+getUSerInfo() async {
+  Map<String, dynamic> userInfo;
+  String uid = auth.currentUser.uid;
+  dynamic resultan = _auth.GetUserById(uid);
+  userInfo = resultan;
+  print(userInfo);
 }
 
 class _InformationBodyState extends State<InformationBody> {
@@ -43,7 +54,15 @@ class _InformationBodyState extends State<InformationBody> {
             ),
             RaisedButton(onPressed: () {
               context.read<AuthenticationService>().signOut();
-            })
+            }),
+            RaisedButton(
+              onPressed: () {
+                if (auth.currentUser != null) {
+                  getUSerInfo();
+                }
+              },
+              child: Text("Check use"),
+            )
           ],
         ),
       ),

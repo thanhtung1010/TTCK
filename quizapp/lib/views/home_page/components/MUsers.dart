@@ -1,7 +1,11 @@
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:dropdownfield/dropdownfield.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quizapp/models/courses.dart';
+import 'package:quizapp/routes/authentication_service.dart';
+import 'package:random_string/random_string.dart';
+import 'package:http/http.dart' as http;
 
 class MUser extends StatefulWidget {
   const MUser({Key key}) : super(key: key);
@@ -85,17 +89,22 @@ class _MUserState extends State<MUser> {
 }
 
 class AddUser extends StatefulWidget {
+  AddUser({Key key}) : super(key: key);
   @override
   _AddUserState createState() => _AddUserState();
 }
 
 class _AddUserState extends State<AddUser> {
   final _formKey = GlobalKey<FormState>();
-  String MSHV, password, email, name;
-  int rule;
-
+  bool _isLoading = false;
   List CourseIdList = [];
-  String courseId;
+  String mshv, name, rule, cid, email;
+  DataCourses dataCourses = new DataCourses();
+  final AuthenticationService _auth =
+      new AuthenticationService(FirebaseAuth.instance);
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -114,6 +123,30 @@ class _AddUserState extends State<AddUser> {
     }
   }
 
+  // createCourses() async {
+  //   if (_formKey.currentState.validate()) {
+  //     setState(() {
+  //       _isLoading = true;
+  //     });
+  //     userId = randomAlphaNumeric(20);
+  //     Map<String, String> coursesMap = {
+  //       "cid": userId,
+  //       "mshv": mshv,
+  //       "password": password,
+  //       "email": email,
+  //       "name": name,
+  //       "cid": courseId,
+  //       "rule": rule,
+  //     };
+
+  //     await dataCourses.AddCourses(coursesMap, courseId).then((value) => {
+  //           setState(() {
+  //             _isLoading = false;
+  //           })
+  //         });
+  //   }
+  // }
+
   String dropdownValue;
 
   @override
@@ -130,6 +163,9 @@ class _AddUserState extends State<AddUser> {
           child: Column(
             children: <Widget>[
               TextFormField(
+                onChanged: (val) {
+                  mshv = val;
+                },
                 validator: (value) {
                   return value.isEmpty ? "MSHV cannot be empty" : null;
                 },
@@ -144,6 +180,7 @@ class _AddUserState extends State<AddUser> {
                 height: size.height * 0.025,
               ),
               TextFormField(
+                controller: passwordController,
                 validator: (value) {
                   return value.isEmpty ? "Password cannot be empty" : null;
                 },
@@ -158,6 +195,10 @@ class _AddUserState extends State<AddUser> {
                 height: size.height * 0.025,
               ),
               TextFormField(
+                onChanged: (val) {
+                  email = val;
+                },
+                controller: emailController,
                 validator: (value) {
                   return value.isEmpty ? "Email cannot be empty" : null;
                 },
@@ -172,6 +213,9 @@ class _AddUserState extends State<AddUser> {
                 height: size.height * 0.025,
               ),
               TextFormField(
+                onChanged: (val) {
+                  name = val;
+                },
                 validator: (value) {
                   return value.isEmpty ? "Name cannot be empty" : null;
                 },
@@ -185,57 +229,25 @@ class _AddUserState extends State<AddUser> {
               SizedBox(
                 height: size.height * 0.025,
               ),
-              Container(
-                margin: const EdgeInsets.only(
-                  left: 5,
-                ),
-                alignment: Alignment.centerLeft,
-                child: DropdownButton<String>(
-                  value: dropdownValue,
-                  icon: const Icon(
-                    Icons.arrow_drop_down,
-                  ),
-                  iconSize: 30,
-                  elevation: 15,
-                  underline: Container(
-                    height: 2,
-                    color: Colors.grey[300],
-                  ),
-                  onChanged: (String newvalue) {
-                    setState(() {
-                      dropdownValue = newvalue;
-                      if (dropdownValue == 'Admin') {
-                        setState(() {
-                          rule = 0;
-                        });
-                      } else {
-                        rule = 1;
-                      }
-                    });
-                  },
-                  items: <String>['Admin', 'User']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
+              DropDownField(
+                onValueChanged: (dynamic value) {
+                  rule = value;
+                },
+                value: rule,
+                required: true,
+                hintText: 'Choose rule account',
+                labelText: 'Rule',
+                items: <String>['Admin', 'User'],
               ),
               SizedBox(
                 height: size.height * 0.025,
               ),
               DropDownField(
                 onValueChanged: (dynamic value) {
-                  courseId = value;
+                  cid = value;
                 },
-                value: courseId,
-                required: true,
+                value: cid,
+                required: false,
                 hintText: 'Choose your course',
                 labelText: 'Course',
                 items: CourseIdList,
@@ -245,7 +257,7 @@ class _AddUserState extends State<AddUser> {
               ),
               FloatingActionButton(
                 onPressed: () => {
-                  print(rule),
+                  createUser(),
                 },
                 child: Icon(Icons.done),
               ),
@@ -254,6 +266,23 @@ class _AddUserState extends State<AddUser> {
         ),
       ),
     );
+  }
+
+  createUser() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    if (_formKey.currentState.validate()) {
+      Map<String, String> usersMap = {
+        "mshv": mshv,
+        "email": email,
+        'name': name,
+        'rule': rule,
+        'cid': cid,
+      };
+      dynamic result = _auth.signUp(
+          email: emailController.text,
+          password: passwordController.text,
+          userData: usersMap);
+    }
   }
 }
 
