@@ -53,20 +53,6 @@ class DataCourses {
     }
   }
 
-  Future GetNameCourseById(String cid) async {
-    String nameCourse;
-
-    try {
-      await courseList.doc(cid).get().then((DocumentSnapshot doc) => {
-            nameCourse = doc.get('courseName'),
-          });
-      return nameCourse;
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
-  }
-
   Future GetNameCourses() async {
     List CourseList = [];
 
@@ -77,6 +63,20 @@ class DataCourses {
             }),
           });
       return CourseList;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future GetNameCourseById(String courseId) async {
+    String nameCourse;
+
+    try {
+      await courseList.doc(courseId).get().then((DocumentSnapshot doc) => {
+            nameCourse = doc.get('courseName'),
+          });
+      return nameCourse;
     } catch (e) {
       print(e.toString());
       return null;

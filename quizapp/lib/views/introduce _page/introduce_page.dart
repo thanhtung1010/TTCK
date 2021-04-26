@@ -1,7 +1,35 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:quizapp/models/courses.dart';
 import 'package:quizapp/views/Constants.dart';
+import 'package:quizapp/views/components/service_list.dart';
 
-class IntroducePage extends StatelessWidget {
+class IntroducePage extends StatefulWidget {
+  @override
+  _IntroducePageState createState() => _IntroducePageState();
+}
+
+class _IntroducePageState extends State<IntroducePage> {
+  List courses = [];
+  @override
+  void initState() {
+    super.initState();
+    fecthCourseList();
+  }
+
+  fecthCourseList() async {
+    dynamic resultant = await DataCourses().GetCourseList();
+
+    if (resultant == null) {
+      print('Unable to get course');
+    } else {
+      setState(() {
+        courses = resultant;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -59,7 +87,7 @@ class IntroducePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ),
+                  ), //redline
                   Container(
                     height: size.height * 1.78,
                     width: size.width,
@@ -131,12 +159,12 @@ class IntroducePage extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
+                  ), //Gioithieu
                   SizedBox(
                     height: size.height * 0.025,
                   ),
                   Container(
-                    height: size.height * 1.5,
+                    height: size.height * 0.7,
                     width: size.width,
                     padding: const EdgeInsets.all(10),
                     child: Column(
@@ -154,116 +182,95 @@ class IntroducePage extends StatelessWidget {
                         SizedBox(
                           height: size.height * 0.015,
                         ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Phát Triển Web',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
+                        CarouselSlider(
+                          options: CarouselOptions(
+                            height: size.height * 0.6,
+                            aspectRatio: 2.0,
+                            enlargeCenterPage: true,
+                            viewportFraction: 1.0,
                           ),
-                        ),
-                        SizedBox(
-                          height: size.height * 0.015,
-                        ),
-                        Container(
-                          width: size.width * 0.4,
-                          child: Column(
-                            children: [
-                              Text(
-                                'Phát triển website (web development):',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                                child: Column(
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Thiết kế website.',
-                                        style: TextStyle(
-                                          fontSize: 10,
+                          items: listService
+                              .map((context) => Container(
+                                    height: size.width,
+                                    width: size.width,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Colors.grey,
+                                          Colors.white,
+                                          Colors.grey,
+                                        ],
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        stops: [0.1, 0.5, 0.9],
+                                      ),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 15, 0, 0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Container(
+                                                height: size.height * 0.18,
+                                                width: size.height * 0.2,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                    border:
+                                                        Border.all(width: 2)),
+                                              ),
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        5, 0, 5, 0),
+                                                width: size.height * 0.27,
+                                                child: AutoSizeText(
+                                                  context.name,
+                                                  maxLines: 2,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20,
+                                                    fontFamily: 'Avenir',
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
+                                        SizedBox(height: size.height * 0.010),
+                                        Container(
+                                          height: size.height * 0.3,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          alignment: Alignment.center,
+                                          child: AutoSizeText(
+                                            context.description,
+                                            textAlign: TextAlign.justify,
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    Text(
-                                      'Bảo trì & nâng cấp website.',
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Quản trị & và cập nhật website.',
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Tư vấn giải pháp quảng bá bằng website.',
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          width: size.width * 0.4,
-                          child: Column(
-                            children: [
-                              Text(
-                                'Công nghệ:',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: size.height * 0.01,
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            'Phát Triển phần mềm ứng dụng',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: size.height * 0.015,
-                        ),
-                        SizedBox(
-                          height: size.height * 0.01,
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Cho thuê phòng máy',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: size.height * 0.015,
+                                  ))
+                              .toList(),
                         ),
                       ],
                     ),
-                  ),
+                  ), //DuchVu
                   SizedBox(
                     height: size.height * 0.025,
                   ),
                   Container(
-                    height: size.height * 0.3,
+                    height: size.height * 0.6,
                     width: size.width,
                     padding: const EdgeInsets.all(10),
                     child: Column(
@@ -277,10 +284,213 @@ class IntroducePage extends StatelessWidget {
                               fontSize: 22,
                             ),
                           ),
+                        ),
+                        SizedBox(height: size.height * 0.01),
+                        CarouselSlider.builder(
+                          options: CarouselOptions(
+                            height: size.width,
+                            aspectRatio: 2.0,
+                            enlargeCenterPage: true,
+                            viewportFraction: 1.0,
+                          ),
+                          itemCount: courses.length,
+                          itemBuilder: (context, index, rlIdx) {
+                            return Container(
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.grey,
+                                    Colors.white,
+                                    Colors.grey,
+                                  ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  stops: [0.1, 0.5, 0.9],
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Image.network(
+                                        '${courses[index]['imgURL']}',
+                                        height: size.width * 0.4,
+                                        width: size.width * 0.4,
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 20, 0, 0),
+                                        alignment: Alignment.topLeft,
+                                        height: size.width * 0.4,
+                                        width: size.width * 0.51,
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              '${courses[index]['courseName']}',
+                                              style: TextStyle(
+                                                fontFamily: 'Avenir',
+                                                fontSize: 30,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w900,
+                                              ),
+                                              textAlign: TextAlign.left,
+                                            ),
+                                            SizedBox(
+                                              height: size.width * 0.03,
+                                            ),
+                                            Text(
+                                              'Học phí: ......',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Đánh giá: .....',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Giảng viên: .....',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Container(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                    alignment: Alignment.topLeft,
+                                    height: size.width * 0.43,
+                                    child: Text(
+                                      '${courses[index]['courseDes']}',
+                                      textAlign: TextAlign.justify,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         )
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: size.height * 0.025,
+                  ),
+                  Container(
+                    height: 100,
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 10,
+                            offset: Offset(0, -3),
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(50),
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.white,
+                            Colors.grey,
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          stops: [0.05, 0.25],
+                        )),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Image.asset(
+                          'assets/images/AGU.png',
+                          width: 100,
+                          height: 100,
+                        ),
+                        Container(
+                          width: size.width * 0.6,
+                          padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          child: Column(
+                            children: [
+                              Container(
+                                child: Text(
+                                  '© TRUNG TÂM TIN HỌC - TRƯỜNG ĐẠI HỌC AN GIANG',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                    border:
+                                        Border(bottom: BorderSide(width: 1))),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Điện thoại:',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text('+84 296 6253599'),
+                                        Text('+84 296 6256565'),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                  decoration: BoxDecoration(
+                                      border:
+                                          Border(bottom: BorderSide(width: 1))),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Fax:',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text('+84 296 3842560'),
+                                    ],
+                                  )),
+                              Container(
+                                decoration: BoxDecoration(
+                                    border:
+                                        Border(bottom: BorderSide(width: 1))),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Email:',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text('cict@agu.edu.vn'),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ), //bottom
                 ],
               ),
             ),

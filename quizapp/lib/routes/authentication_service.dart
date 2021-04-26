@@ -5,6 +5,8 @@ class AuthenticationService {
   final FirebaseAuth _firebaseAuth;
   AuthenticationService(this._firebaseAuth);
   Stream<User> get authStateChanges => _firebaseAuth.authStateChanges();
+  final CollectionReference userList =
+      FirebaseFirestore.instance.collection('Users');
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
@@ -46,15 +48,43 @@ class AuthenticationService {
   }
 
   Future GetUserById(String uid) async {
-    final CollectionReference courseList =
+    final CollectionReference userList =
         FirebaseFirestore.instance.collection('Users');
     Map<String, dynamic> data;
 
     try {
-      await courseList.doc(uid).get().then((DocumentSnapshot snapshot) => {
+      await userList.doc(uid).get().then((DocumentSnapshot snapshot) => {
             data = snapshot.data(),
           });
       return data;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future GetRuleUserById(String uid) async {
+    String userRule;
+
+    try {
+      await userList.doc(uid).get().then((DocumentSnapshot doc) => {
+            userRule = doc.get('rule'),
+          });
+      return userRule;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future GetCidByUserId(String cid) async {
+    String userCid;
+
+    try {
+      await userList.doc(cid).get().then((DocumentSnapshot doc) => {
+            userCid = doc.get('cid'),
+          });
+      return userCid;
     } catch (e) {
       print(e.toString());
       return null;

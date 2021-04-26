@@ -1,5 +1,9 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:quizapp/routes/authentication_service.dart';
+
+import 'package:provider/provider.dart';
 import 'package:quizapp/views/Constants.dart';
 import 'package:quizapp/views/home_page/components/course_body.dart';
 import 'package:quizapp/views/home_page/components/info_body.dart';
@@ -12,44 +16,92 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  AuthenticationService _auth =
+      new AuthenticationService(FirebaseAuth.instance);
+  String userRule;
   int _selectedIndex = 0;
   GlobalKey _bottomNavigationKey = GlobalKey();
+  @override
+  void initState() {
+    super.initState();
+    getUserRule();
+  }
 
-  final _pageOption = [
+  getUserRule() async {
+    dynamic resultant = await _auth.GetRuleUserById(auth.currentUser.uid);
+
+    if (resultant == null) {
+      print('Unable to get rule');
+    } else {
+      setState(() {
+        userRule = resultant;
+      });
+    }
+  }
+
+  final _pageOptionUser = [
+    CourseBody(),
+    InformationBody(),
+  ];
+  final _pageOptionAdmin = [
     CourseBody(),
     InformationBody(),
     ManagerBody(),
   ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: navigationColor,
-      body: _pageOption[_selectedIndex],
+      body: userRule == "Admin"
+          ? _pageOptionAdmin[_selectedIndex]
+          : _pageOptionUser[_selectedIndex],
       bottomNavigationBar: CurvedNavigationBar(
-        index: 0,
-        animationDuration: Duration(milliseconds: 200),
-        animationCurve: Curves.bounceInOut,
         key: _bottomNavigationKey,
         height: 50,
         backgroundColor: navigationColor,
-        items: <Widget>[
-          Icon(
-            Icons.apps,
-            size: 30,
-            color: Colors.grey[600],
-          ),
-          Icon(
-            Icons.account_circle_outlined,
-            size: 30,
-            color: Colors.grey[600],
-          ),
-          Icon(
-            Icons.settings,
-            size: 30,
-            color: Colors.grey[600],
-          ),
-        ],
+        animationDuration: Duration(milliseconds: 200),
+        animationCurve: Curves.bounceInOut,
+        items: userRule == "Admin"
+            ? <Widget>[
+                Icon(
+                  Icons.apps,
+                  size: 30,
+                  color: Colors.grey[600],
+                ),
+                Icon(
+                  Icons.account_circle_outlined,
+                  size: 30,
+                  color: Colors.grey[600],
+                ),
+                Icon(
+                  Icons.settings,
+                  size: 30,
+                  color: Colors.grey[600],
+                ),
+              ]
+            : <Widget>[
+                Icon(
+                  Icons.apps,
+                  size: 30,
+                  color: Colors.grey[600],
+                ),
+                Icon(
+                  Icons.account_circle_outlined,
+                  size: 30,
+                  color: Colors.grey[600],
+                ),
+                GestureDetector(
+                  onTap: () {
+                    context.read<AuthenticationService>().signOut();
+                  },
+                  child: Icon(
+                    Icons.logout,
+                    size: 30,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
         onTap: (index) {
           setState(() {
             _selectedIndex = index;

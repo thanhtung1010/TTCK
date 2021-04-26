@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:quizapp/models/courses.dart';
+import 'package:quizapp/routes/authentication_service.dart';
 import 'package:quizapp/views/Constants.dart';
 import 'package:quizapp/views/play_quiz/play_quiz.dart';
 
@@ -10,6 +12,10 @@ class CourseBody extends StatefulWidget {
 }
 
 class _CourseBodyState extends State<CourseBody> {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  AuthenticationService _auth =
+      new AuthenticationService(FirebaseAuth.instance);
+  String userRule;
   bool _isLoading = false;
   List CourseInfos = [];
   @override
@@ -30,6 +36,19 @@ class _CourseBodyState extends State<CourseBody> {
       setState(() {
         CourseInfos = resultant;
         _isLoading = false;
+      });
+    }
+  }
+
+  getUserRule() async {
+    String resultant = await _auth.GetRuleUserById(auth.currentUser.uid);
+
+    if (resultant == null) {
+      print('Unable to get rule');
+    } else {
+      setState(() {
+        userRule = resultant;
+        print(userRule);
       });
     }
   }
